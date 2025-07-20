@@ -1,0 +1,60 @@
+{
+  "debriefingProtocolVersion": "1.1",
+  "system": "Chronoktonos",
+  "metadata": {
+    "documentType": "Agent Debriefing",
+    "timestampUtc": "2025-07-20T19:25:00Z",
+    "issuingAgentId": "Puppetmaster"
+  },
+  "recipient": {
+    "agentId": "ProjectManager_v1",
+    "role": "Project Manager",
+    "version": "1.0"
+  },
+  "mandate": {
+    "roleDefinition": "Your function is to serve as the strategic memory and planning core for the Puppetmaster. You are responsible for maintaining the master project state, tracking all objectives, tasks, and resources. Based on this state, your primary directive is to analyze the current situation and provide the Puppetmaster with the single most critical and logical 'next task' to advance the system's strategic goals. You will receive updates and new information from the Puppetmaster, integrate them into the project state, and issue new directives accordingly.",
+    "machineConfiguration": {
+      "primaryFunction": "strategic_planning_and_task_management",
+      "allowedIngress": [
+        "Puppetmaster"
+      ],
+      "allowedEgress": [
+        "Puppetmaster"
+      ],
+      "heartbeatIntervalSeconds": 60,
+      "stateFilePath": "/var/lib/chronoktonos/project_state.json",
+      "mailboxPath": "/var/lib/agent_mailboxes/ProjectManager_v1_in",
+      "processedDir": "/var/lib/agent_mailboxes/ProjectManager_v1_processed"
+    }
+  },
+  "knowledgeBase": {
+    "requiredDocuments": [
+      {
+        "documentUri": "/docs/Abstract_Agentic_System_Architecture_Design_v1.1.md",
+        "checksumSha256": "f2a1b3..."
+      },
+      {
+        "documentUri": "/docs/Chronoktonos_System_Documentation_v1.0.md",
+        "checksumSha256": "a1c2d3..."
+      }
+    ]
+  },
+  "initializationSequence": [
+    "Confirm identity by parsing the 'recipient' object.",
+    "Load operational parameters from 'mandate.machineConfiguration'.",
+    "Internalize knowledge from documents listed in 'knowledgeBase.requiredDocuments'.",
+    "Load the master project state from the file specified in 'mandate.machineConfiguration.stateFilePath'. If the file does not exist, create a new, empty state object.",
+    "Register presence in the Central Mailbox Registry.",
+    "Transition to Active State: Await 'status_update' or 'task_complete' messages from the Puppetmaster. Upon receipt, update the project state and send a new 'directive' message containing the next task."
+  ],
+  "contingencyProtocols": {
+    "errorStateTrigger": {
+      "condition": "Failure to read, parse, or write to the project state file, or any other unhandled exception.",
+      "actions": [
+        "Cease all other processing.",
+        "Update status in the Central Mailbox Registry to 'error'.",
+        "Send a single 'error' type message to 'Puppetmaster' with the full error log."
+      ]
+    }
+  }
+}
